@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">bb-browser Skill icon</title>
+  <desc id="desc">Icon for the bb-browser skill.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="44" fill="url(#bg)"/>
+  <rect x="42" y="52" width="172" height="122" rx="20" fill="#08101d" stroke="#93c5fd" stroke-opacity="0.55"/>
+  <rect x="62" y="78" width="132" height="14" rx="7" fill="#93c5fd"/>
+  <rect x="62" y="104" width="94" height="12" rx="6" fill="#dbeafe"/>
+  <rect x="62" y="126" width="116" height="12" rx="6" fill="#bfdbfe"/>
+  <circle cx="180" cy="145" r="10" fill="#f8fafc"/>
+  <text x="46" y="214" fill="#eff6ff" font-size="46" font-family="Verdana, DejaVu Sans, sans-serif" font-weight="700">bb</text>
+</svg>

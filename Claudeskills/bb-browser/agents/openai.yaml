@@ -1,0 +1,7 @@
+interface:
+  display_name: "bb-browser Skill"
+  short_description: "Use bb-browser with real browser login state"
+  icon_small: "./assets/bb-browser-small.svg"
+  icon_large: "./assets/bb-browser.svg"
+  brand_color: "#1F6FEB"
+  default_prompt: "Use $bb-browser to solve this task through bb-browser, preferring site commands first and falling back to real-browser page control only when needed."
