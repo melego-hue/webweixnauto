@@ -1,0 +1,76 @@
+{
+  "name": "moments-writer-pro",
+  "version": "2.0.0",
+  "description": "朋友圈智能控制台 - 支持AI文案生成、数据源同步(Notion/飞书)、定时自动发布与即时发送工作流",
+  "author": "Claude Developer Agent",
+  "main": "main.js",
+  "commands": [
+    {
+      "name": "moments",
+      "description": "朋友圈工作流一站式控制台",
+      "parameters": [
+        {
+          "name": "action",
+          "type": "string",
+          "description": "执行指令：generate(写文案), sync(同步Notion/飞书), schedule(管理定时任务), send(立即发送朋友圈), list(查看发送队列)",
+          "required": true,
+          "enum": ["generate", "sync", "schedule", "send", "list"]
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "description": "文案公式类型 (仅generate有效)",
+          "required": false,
+          "enum": ["professional", "reliable", "warm", "altruistic", "counter", "target", "intro_100", "story"]
+        },
+        {
+          "name": "topic",
+          "type": "string",
+          "description": "文案主题 (仅generate有效)",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "string",
+          "description": "云端同步源 (仅sync有效)",
+          "required": false,
+          "enum": ["all", "luffy", "v2", "feishu"]
+        },
+        {
+          "name": "schedule_action",
+          "type": "string",
+          "description": "定时控制指令 (仅schedule有效)",
+          "required": false,
+          "enum": ["start", "stop", "list"]
+        },
+        {
+          "name": "cron",
+          "type": "string",
+          "description": "定时 Cron 表达式 (仅schedule start有效，如 '0 8 * * *')",
+          "required": false
+        },
+        {
+          "name": "dry_run",
+          "type": "boolean",
+          "description": "是否仅模拟运行不实际发布 (仅send/sync/schedule有效)",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "type": "number",
+          "description": "列出文案最大条数 (仅list有效)",
+          "required": false
+        }
+      ],
+      "examples": [
+        {"usage": "/moments action=generate type=professional topic=AI智能排版场景", "description": "根据专业型公式生成一条关于AI排版的朋友圈并加入队列"},
+        {"usage": "/moments action=sync source=all", "description": "从 Notion 发稿池与飞书多维表格同步所有 pending 数据到本地 SQLite 队列"},
+        {"usage": "/moments action=list limit=10", "description": "查看本地待发送队列与发送历史日志"},
+        {"usage": "/moments action=send dry_run=true", "description": "模拟执行一次发送任务 (检测博主并自动匹配专属图片/随机图片)"},
+        {"usage": "/moments action=schedule schedule_action=start cron='0 8 * * *'", "description": "设定每天早上 8:00 定时执行朋友圈发送"}
+      ]
+    }
+  ],
+  "keywords": ["wechat", "moments", "朋友圈", "私域", "文案", "飞书", "notion", "定时发送"],
+  "dependencies": []
+}
