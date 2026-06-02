@@ -244,6 +244,10 @@ def send_moments(text, image_path=None, dry_run=False):
             return False
         time.sleep(2)
 
+        print("\nStep 8: Close Moments Window")
+        pyautogui.press("esc")
+        time.sleep(1)
+
         print("\nSUCCESS: Sent!")
         return True
 
