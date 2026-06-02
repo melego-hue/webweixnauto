@@ -5,7 +5,8 @@
 import requests
 
 def main():
-    new_token = 'ntn_p65367370428mJhjCSr1SHNrMVxmqVwQFTjx3zBG0cl5xc'
+    import os
+    new_token = os.environ.get("NOTION_API_KEY") or "your_notion_api_token_here"
     headers = {
         'Authorization': f'Bearer {new_token}',
         'Content-Type': 'application/json',

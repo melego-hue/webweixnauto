@@ -117,8 +117,8 @@ python run.py help
 ## 配置信息
 
 ### Notion 配置
-- **Token**: `ntn_p65367370428mJhjCSr1SHNrMVxmqVwQFTjx3zBG0cl5xc`
-- **数据库**: `3391859e-b112-80b9-948c-c1cbc77b46a3`
+- **Token**: `your_notion_api_token_here`
+- **数据库**: `your_notion_database_id_here`
 - **数据库名称**: 路飞全自动发稿池V2.5
 
 ### 字段映射

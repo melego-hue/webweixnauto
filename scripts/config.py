@@ -14,8 +14,9 @@ UI_IMAGES_DIR = PROJECT_ROOT / "ui_images"
 SCRIPTS_DIR = PROJECT_ROOT / "scripts"
 
 # Notion Configuration
-NOTION_API_TOKEN = "ntn_p65367370428mJhjCSr1SHNrMVxmqVwQFTjx3zBG0cl5xc"
-DATABASE_ID = "3391859e-b112-80b9-948c-c1cbc77b46a3"  # 路飞全自动发稿池V2.5
+import os
+NOTION_API_TOKEN = os.environ.get("NOTION_API_KEY") or "your_notion_api_token_here"
+DATABASE_ID = os.environ.get("NOTION_DATABASE_ID") or "your_notion_database_id_here"  # 路飞全自动发稿池V2.5
 
 # Field names from Notion database
 NOTION_FIELDS = {

@@ -9,8 +9,9 @@ if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 def main():
-    token = 'ntn_p65367370428mJhjCSr1SHNrMVxmqVwQFTjx3zBG0cl5xc'
-    db_id = '3391859e-b112-80b9-948c-c1cbc77b46a3'
+    import os
+    token = os.environ.get("NOTION_API_KEY") or "your_notion_api_token_here"
+    db_id = os.environ.get("NOTION_DATABASE_ID") or "your_notion_database_id_here"
     
     headers = {
         'Authorization': f'Bearer {token}',
