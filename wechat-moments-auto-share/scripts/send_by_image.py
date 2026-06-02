@@ -219,9 +219,12 @@ def send_feishu_notification(title, message):
         try:
             with open(env_path, "r", encoding="utf-8-sig") as f:
                 for line in f:
-                    if line.strip().startswith("FEISHU_WEBHOOK_URL="):
+                    line = line.strip()
+                    if line.startswith("FEISHU_WEBHOOK_URL="):
                         webhook_url = line.split("=", 1)[1].strip()
                         break
+                    elif line.startswith("FEISHU_WEBHOOK_BOT="):
+                        webhook_url = line.split("=", 1)[1].strip()
         except:
             pass
             
