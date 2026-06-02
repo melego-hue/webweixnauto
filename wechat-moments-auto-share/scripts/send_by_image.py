@@ -163,6 +163,94 @@ def find_and_click(image_name, timeout=10, confidence=0.8, max_retries=2):
     return False
 
 
+def wait_for_user_idle(idle_seconds=5):
+    """
+    检测用户是否正在操作电脑。如果在操作，则静默等待，直至用户完全闲置。
+    """
+    print(f"\n[占线检测] 正在确认您当前是否在使用电脑（避免抢占物理鼠标）...")
+    last_pos = pyautogui.position()
+    idle_start = time.time()
+    
+    while True:
+        current_pos = pyautogui.position()
+        # 如果鼠标位置发生偏移，说明用户在使用电脑，重新计时
+        if current_pos != last_pos:
+            last_pos = current_pos
+            idle_start = time.time()
+            print("  [占线] 检测到您的鼠标在移动，AI 助手已自动暂停等待...", end="\r")
+        
+        # 闲置时间达到设定值，可以安全介入
+        if time.time() - idle_start >= idle_seconds:
+            print("\n  [安全] 检测到您已闲置，AI 助手开始闪击执行...")
+            break
+        time.sleep(1)
+
+
+def show_windows_toast(title, message):
+    """
+    使用 PowerShell 调用 Windows NotifyIcon，弹出原生气泡通知（免第三方依赖）
+    """
+    import subprocess
+    ps_cmd = (
+        f"[void][System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); "
+        f"$notification = New-Object System.Windows.Forms.NotifyIcon; "
+        f"$notification.Icon = [System.Drawing.SystemIcons]::Information; "
+        f"$notification.BalloonTipIcon = 'Info'; "
+        f"$notification.BalloonTipTitle = '{title}'; "
+        f"$notification.BalloonTipText = '{message}'; "
+        f"$notification.Visible = $True; "
+        f"$notification.ShowBalloonTip(5000)"
+    )
+    try:
+        subprocess.Popen(["powershell", "-Command", ps_cmd], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception as e:
+        print(f"  [Warning] Toast notify failed: {e}")
+
+
+def send_feishu_notification(title, message):
+    """
+    向飞书机器人发送推送通知（通过 .env 中配置的 FEISHU_WEBHOOK_URL）
+    """
+    import requests
+    # 优先加载配置
+    env_path = Path("d:/AIWork/.env")
+    webhook_url = None
+    if env_path.exists():
+        try:
+            with open(env_path, "r", encoding="utf-8-sig") as f:
+                for line in f:
+                    if line.strip().startswith("FEISHU_WEBHOOK_URL="):
+                        webhook_url = line.split("=", 1)[1].strip()
+                        break
+        except:
+            pass
+            
+    if webhook_url:
+        try:
+            payload = {
+                "msg_type": "post",
+                "content": {
+                    "post": {
+                        "zh_cn": {
+                            "title": title,
+                            "content": [
+                                [
+                                    {"tag": "text", "text": message}
+                                ]
+                            ]
+                        }
+                    }
+                }
+            }
+            response = requests.post(webhook_url, json=payload, timeout=5)
+            if response.status_code == 200:
+                print("  [通知] 飞书推送成功！")
+                return True
+        except Exception as e:
+            print(f"  [Warning] Feishu notification failed: {e}")
+    return False
+
+
 def send_moments(text, image_path=None, dry_run=False):
     """
     Send moments
@@ -179,6 +267,9 @@ def send_moments(text, image_path=None, dry_run=False):
     if dry_run:
         print(f"\n[Dry Run] Will send: {text}")
         return True
+
+    # 新增：占线退避检测，确保用户不处于活跃操作状态
+    wait_for_user_idle(idle_seconds=5)
 
     from wechat_utils import ensure_wechat_ready
     if not ensure_wechat_ready():
@@ -247,6 +338,12 @@ def send_moments(text, image_path=None, dry_run=False):
         print("\nStep 8: Close Moments Window")
         pyautogui.press("esc")
         time.sleep(1)
+
+        # 发送成功通知
+        notify_title = "微信朋友圈发送成功 🚀"
+        notify_msg = f"已成功发表朋友圈且已自动关闭窗口！\n文案：{text[:35]}..."
+        show_windows_toast(notify_title, notify_msg)
+        send_feishu_notification(notify_title, notify_msg)
 
         print("\nSUCCESS: Sent!")
         return True
